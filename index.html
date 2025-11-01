@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="game.css">
+    <script src="jquery-3.7.1.min.js"></script>
+    <title>snakey</title>
+</head>
+<body>
+    <div class="score"><h1>Score : 0</h1></div><br>
+    <div class="arena">
+        <div class="player"></div>
+        <div class="ball"></div>
+    </div>
+    <div class="controls">
+        <button class="up" onclick="move('up')">up</button><br>
+        <button class="left" onclick="move('left')">left</button>
+        <button class="right" onclick="move('right')">right</button><br>
+        <button class="down" onclick="move('down')">down</button>
+    </div>
+    <div class="mode">
+        <div id="easy" style="background-color: green;" onclick="mode('easy')">Easy</div>
+        <div id="medium" style="background-color: orange;" onclick="mode('medium')">Medium</div>
+        <div id="hard" style="background-color: red;" onclick="mode('hard')">Hard</div>
+    </div>
+    <div id="timer">
+        <h1></h1>
+    </div>
+    <div id="result">
+        <h1 id="stmt"></h1>
+        <h2 id="score"></h2>
+        <h1 id="x" style="color: rgb(5, 255, 5); cursor: pointer;">Play Again</h1>
+    </div>
+    <script>
+        let score = 0;
+        let s;
+        let t;
+        let m = 0;
+        function timer() {
+            let s = 29;
+            t = setInterval(() => {
+                if(s <= 10) {
+                    $('#timer h1').css('color', 'red');
+                }
+                $('#timer h1').text("0 : "+s)
+                s--;
+                if(s == -1) {
+                    clearInterval(t);
+                    $('#stmt').text("Game Over!");
+                    $('#score').text("Score : "+score);
+                    reset();
+                }
+            }, 1000);
+        }
+        function mode(m1) {
+            if(m1 == 'easy') {
+                m = 150;
+            }
+            else if(m1 == 'medium') {
+                m = 50;
+            }
+            else if(m1 == 'hard') {
+                m = 10; 
+            }
+            $(".mode").hide();
+            timer();
+        }
+        function reset() {
+            clearInterval(s)
+            clearInterval(t);
+            $('.score h1').text("Score : 0");
+            $('#timer h1').text("0 : 0");
+            $(".player").css('top', '10px');
+            $(".player").css('left', '15px');
+            $("#score").text('Score : '+score);
+            $('#timer h1').css('color', 'black');
+            $('#result').show();
+            score = 0;
+        }
+        $('#x').click(()=> {
+            reset();
+            $('#result').hide();
+            $(".mode").show();
+        })
+        function move(direction) {
+            clearInterval(s)
+            s = setInterval(() => {
+                if(direction == 'up') {
+                    let current_position = parseInt($(".player").css('top'))
+                    current_position = (current_position-5) + "px";
+                    $(".player").css('top', current_position);
+                    let pt = parseInt($(".player").css('top'))
+                    let pl = parseInt($(".player").css('left'))
+                    let bt = parseInt($(".ball").css('top'))
+                    let bl = parseInt($(".ball").css('left'))
+                    let x = Math.abs(pt - bt);
+                    let y = Math.abs(pl - bl)
+                    if( x < 31 && y < 10) {
+                        score++;
+                        let left = parseFloat(Math.random(0,1))*1000;
+                        let top = parseFloat(Math.random(0,1))*350;
+                        $(".ball").css('top', top);
+                        $(".ball").css('left', left);
+                        $(".score h1").text('Score : '+score);
+                    }
+                    if(current_position == '0px') {
+                        clearInterval(s);
+                        $('#stmt').text("Game Over!");
+                        $('#score').text("Score : "+score);
+                        $('#result').show();
+                        reset();
+                    }
+                    
+                }
+                else if(direction == 'left') {
+                    let current_position = parseInt($(".player").css('left'))
+                    current_position = (current_position-5) + "px";           
+                    $(".player").css('left', current_position);
+                    let pt = parseInt($(".player").css('top'))
+                    let pl = parseInt($(".player").css('left'))
+                    let bt = parseInt($(".ball").css('top'))
+                    let bl = parseInt($(".ball").css('left'))
+                    let x = Math.abs(pt - bt);
+                    let y = Math.abs(pl - bl)
+                    if( x < 31 && y < 10) {
+                        score++;
+                        let left = parseFloat(Math.random(0,1))*1000;
+                        let top = parseFloat(Math.random(0,1))*400;
+                        $(".ball").css('top', top);
+                        $(".ball").css('left', left);
+                        $(".score h1").text('Score : '+score);
+                    }
+                    if(current_position == '0px') {
+                        clearInterval(s);
+                        $('#stmt').text("Game Over!");
+                        $('#score').text("Score : "+score);
+                        $('#result').show();
+                        reset();
+                    }
+                }
+                else if(direction == 'right') {
+                    let current_position = parseInt($(".player").css('left'))
+                    current_position = (current_position+5) + "px";
+                    $(".player").css('left', current_position);
+                    let pt = parseInt($(".player").css('top'))
+                    let pl = parseInt($(".player").css('left'))
+                    let bt = parseInt($(".ball").css('top'))
+                    let bl = parseInt($(".ball").css('left'))
+                    let x = Math.abs(pt - bt);
+                    let y = Math.abs(pl - bl)
+                    if( x < 31 && y < 10) {
+                        score++;
+                        let left = parseFloat(Math.random(0,1))*1000;
+                        let top = parseFloat(Math.random(0,1))*400;
+                        $(".ball").css('top', top);
+                        $(".ball").css('left', left);
+                        $(".score h1").text('Score : '+score);
+                    }
+                    if(current_position == '1315px') {
+                        clearInterval(s);
+                        $('#stmt').text("Game Over!");
+                        $('#score').text("Score : "+score);
+                        $('#x').text("Play Again")
+                        $('#result').show();
+                        reset();
+                    }
+                }
+                else if(direction == 'down') {
+                    let current_position = parseInt($(".player").css('top'))
+                    current_position = (current_position+5) + "px";
+                    $(".player").css('top', current_position);
+                    let pt = parseInt($(".player").css('top'))
+                    let pl = parseInt($(".player").css('left'))
+                    let bt = parseInt($(".ball").css('top'))
+                    let bl = parseInt($(".ball").css('left'))
+                    let x = Math.abs(pt - bt);
+                    let y = Math.abs(pl - bl)
+                    if( x < 31 && y < 10) {
+                        score++;
+                        let left = parseFloat(Math.random(0,1))*1000;
+                        let top = parseFloat(Math.random(0,1))*400;
+                        $(".ball").css('top', top);
+                        $(".ball").css('left', left);
+                        $(".score h1").text('Score : '+score);
+                    }
+                    if(current_position == '400px') {
+                        clearInterval(s);
+                        $('#stmt').text("Game Over!");
+                        $('#score').text("Score : "+score);
+                        $('#x').text("Play Again")
+                        $('#result').show();
+                        reset();
+                    }
+                }
+            }, m);
+        }  
+    </script>
+</body>
+</html>
